@@ -1,0 +1,59 @@
+Step 1: Define Node Structure
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+Step 2: Create a New Node
+Node* createNode(int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+Step 3: Insert Function (Recursive)
+Node* insert(Node* root, int value) {
+
+    // If tree is empty, create root
+    if (root == NULL) {
+        return createNode(value);
+    }
+
+    // If value is smaller, insert in left subtree
+    if (value < root->data) {
+        root->left = insert(root->left, value);
+    }
+    // If value is greater, insert in right subtree
+    else if (value > root->data) {
+        root->right = insert(root->right, value);
+    }
+
+    return root;
+}
+Step 4: Inorder Traversal (to verify BST)
+void inorder(Node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        cout << root->data << " ";
+        inorder(root->right);
+    }
+}
+Step 5: Main Function
+int main() {
+    Node* root = NULL;
+
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 70);
+    insert(root, 20);
+    insert(root, 40);
+
+    cout << "Inorder Traversal: ";
+    inorder(root);
+
+    return 0;
+}
