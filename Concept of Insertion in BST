@@ -1,0 +1,28 @@
+🌳 What is a Binary Search Tree (BST)?
+  ->A Binary Search Tree is a special kind of binary tree where:
+  ->Each node has at most two children
+  ->Left subtree contains values less than the node
+  ->Right subtree contains values greater than the node
+  ->No duplicates (in classic BST)
+
+BST Rule (Golden Rule ✨): Left < Root < Right
+
+🔹Concept of Insertion in BST
+    When inserting a new value:
+  ->Start from the root
+  ->Compare the value with the current node:
+      If smaller, go to the left
+      If greater, go to the right
+  ->Repeat until you find a NULL position
+  ->Insert the new node there
+📌 Important:
+  BST insertion is always done at a leaf position
+
+🧠 Example
+
+Insert values: 50, 30, 70, 20, 40
+        50
+       /  \
+     30    70
+    /  \
+  20   40
