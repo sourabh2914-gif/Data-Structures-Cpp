@@ -1,0 +1,173 @@
+->Red-Black Tree Node Structure
+#include <iostream>
+using namespace std;
+
+enum Color { RED, BLACK };
+
+struct Node {
+    int data;
+    Color color;
+    Node *left, *right, *parent;
+};
+
+->Create New Node
+Node* createNode(int data) {
+    Node* node = new Node();
+    node->data = data;
+    node->color = RED;      // new node is RED
+    node->left = node->right = node->parent = NULL;
+    return node;
+}
+
+->Left Rotation
+void leftRotate(Node*& root, Node*& x) {
+    Node* y = x->right;
+    x->right = y->left;
+
+    if (y->left != NULL)
+        y->left->parent = x;
+
+    y->parent = x->parent;
+
+    if (x->parent == NULL)
+        root = y;
+    else if (x == x->parent->left)
+        x->parent->left = y;
+    else
+        x->parent->right = y;
+
+    y->left = x;
+    x->parent = y;
+}
+
+->Right Rotation
+void rightRotate(Node*& root, Node*& y) {
+    Node* x = y->left;
+    y->left = x->right;
+
+    if (x->right != NULL)
+        x->right->parent = y;
+
+    x->parent = y->parent;
+
+    if (y->parent == NULL)
+        root = x;
+    else if (y == y->parent->left)
+        y->parent->left = x;
+    else
+        y->parent->right = x;
+
+    x->right = y;
+    y->parent = x;
+}
+
+->Fix Red-Black Tree Violations
+void fixViolation(Node*& root, Node*& pt) {
+    Node* parent = NULL;
+    Node* grandparent = NULL;
+
+    while (pt != root && pt->color == RED && pt->parent->color == RED) {
+        parent = pt->parent;
+        grandparent = parent->parent;
+
+        // Parent is left child
+        if (parent == grandparent->left) {
+            Node* uncle = grandparent->right;
+
+            // Case 1: Uncle is RED (Recoloring)
+            if (uncle != NULL && uncle->color == RED) {
+                grandparent->color = RED;
+                parent->color = BLACK;
+                uncle->color = BLACK;
+                pt = grandparent;
+            }
+            // Case 2 & 3: Uncle is BLACK
+            else {
+                if (pt == parent->right) {
+                    leftRotate(root, parent);
+                    pt = parent;
+                    parent = pt->parent;
+                }
+                rightRotate(root, grandparent);
+                swap(parent->color, grandparent->color);
+                pt = parent;
+            }
+        }
+        // Parent is right child (mirror cases)
+        else {
+            Node* uncle = grandparent->left;
+
+            if (uncle != NULL && uncle->color == RED) {
+                grandparent->color = RED;
+                parent->color = BLACK;
+                uncle->color = BLACK;
+                pt = grandparent;
+            } else {
+                if (pt == parent->left) {
+                    rightRotate(root, parent);
+                    pt = parent;
+                    parent = pt->parent;
+                }
+                leftRotate(root, grandparent);
+                swap(parent->color, grandparent->color);
+                pt = parent;
+            }
+        }
+    }
+
+    root->color = BLACK; // root must be BLACK
+}
+
+->Insert Function
+void insert(Node*& root, int data) {
+    Node* pt = createNode(data);
+
+    Node* y = NULL;
+    Node* x = root;
+
+    // BST insert
+    while (x != NULL) {
+        y = x;
+        if (pt->data < x->data)
+            x = x->left;
+        else
+            x = x->right;
+    }
+
+    pt->parent = y;
+
+    if (y == NULL)
+        root = pt;
+    else if (pt->data < y->data)
+        y->left = pt;
+    else
+        y->right = pt;
+
+    fixViolation(root, pt);
+}
+
+->Inorder Traversal
+void inorder(Node* root) {
+    if (root == NULL)
+        return;
+
+    inorder(root->left);
+    cout << root->data << "(" << (root->color == RED ? "R" : "B") << ") ";
+    inorder(root->right);
+}
+
+->Main Function
+int main() {
+    Node* root = NULL;
+
+    insert(root, 10);
+    insert(root, 20);
+    insert(root, 30);
+    insert(root, 15);
+    insert(root, 25);
+
+    cout << "Inorder traversal:\n";
+    inorder(root);
+
+    return 0;
+}
