@@ -1,0 +1,22 @@
+🌳 What is a Red-Black Tree?
+  ->A Red-Black Tree (RBT) is a self-balancing Binary Search Tree that guarantees O(log n) time for insert, delete, and search.
+
+🔴⚫ Red-Black Tree Properties (MUST KNOW)
+
+  ->Every node is either RED or BLACK
+  ->Root is always BLACK
+  ->All leaves (NULL) are BLACK
+  ->No two consecutive RED nodes
+  ->Every path from a node to its descendant NULL nodes has the same number of BLACK nodes
+
+🧠 Insertion Concept (High Level)
+
+Insertion happens in two steps:
+  Step 1️⃣ BST Insert
+    ->Insert the node like a normal BST
+    ->New node is always RED
+  Step 2️⃣ Fix Violations
+    ->If parent is BLACK → ✅ no problem
+    ->If parent is RED → ❌ violation → fix using:
+                        *Recoloring
+                        *Rotations (Left / Right)
